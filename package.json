@@ -4,7 +4,7 @@
   "description": "Gestion de expedientes del Hcm",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon dist/app.js"
   },
   "keywords": [],
