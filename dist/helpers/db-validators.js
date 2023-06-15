@@ -28,8 +28,8 @@ const existeUsuario = (nombre_usuario = '') => __awaiter(void 0, void 0, void 0,
     const existeNombreUsuario = yield usuario_1.default.findOne({
         where: { nombre_usuario }
     });
-    if (existeNombreUsuario) {
-        throw new Error(`El usuario ${nombre_usuario} ya está registrado en la BD`);
+    if (!existeNombreUsuario) {
+        throw new Error(`El usuario ${nombre_usuario} NO está registrado en la BD`);
     }
 });
 exports.existeUsuario = existeUsuario;

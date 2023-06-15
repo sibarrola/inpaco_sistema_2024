@@ -109,18 +109,21 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             //resto.setDataValue('password',bcryptjs.hashSync(password,salt));
             resto.password = bcryptjs_1.default.hashSync(password, salt);
         }
-        yield usuario.update({
-            apellido: resto.apellido,
-            nombres: resto.nombres,
-            email: resto.email,
-            rol: resto.rol,
-            estado: resto.estado
+        /* await usuario.update({
+                            apellido:resto.apellido,
+                            nombres:resto.nombres,
+                            email:resto.email,
+                            rol: resto.rol,
+                            estado:resto.estado}); */
+        yield usuario.update(resto);
+        res.json({
+            msg: `actualizado id: ${id}`,
+            datos: resto
         });
-        res.json(usuario); // envio el usario ya actualziado
     }
     catch (error) {
-        console.log(console.error);
-        res.status(500).json({
+        console.log(error);
+        return res.status(500).json({
             msg: 'no puedo actualizar, hable con el administrador',
             id: id,
             resto: resto
@@ -141,8 +144,9 @@ const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         // await usuario1.destroy() //ESTA ES LA ELIMINICACION FISICA
         yield usuario1.update({ estado: 0 });
-        const { usuario } = req.body;
-        res.json({ "usuario_borrado": usuario1, "usuario_autentificado": usuario }); // envio el usario ya actualziado
+        const usuariotoken = res.locals.usuario1.dataValues;
+        //    console.log(usuariotoken)
+        res.json({ "usuario_borrado": usuario1, "usuariotoken": usuariotoken }); // envio el usario ya actualziado
     }
     catch (error) {
         console.log(console.error);

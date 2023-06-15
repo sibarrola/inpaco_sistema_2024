@@ -13,8 +13,8 @@ export const esRolValido =async (rol='') => {
 export const existeUsuario =async (nombre_usuario='') => {
     const existeNombreUsuario= await Usuario.findOne({
          where: { nombre_usuario}}) ;
-    if (existeNombreUsuario) {
-        throw new Error(`El usuario ${nombre_usuario} ya está registrado en la BD`)
+    if (!existeNombreUsuario) {
+        throw new Error(`El usuario ${nombre_usuario} NO está registrado en la BD`)
     }
 
 }

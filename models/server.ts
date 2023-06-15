@@ -1,15 +1,19 @@
 import express , {Application} from 'express';
+import login from '../routes/auth';
 import userRoutes from '../routes/usuario';
+
 import cors from 'cors';
 import db from '../db/connection';
-import rol from '../models/rol';
+ 
 class Server {
     //Aqui en typescript hay que definir las propiedades antes de usarla 
   private app: Application;  //defino app del tipo Application que lo traigo de express
   private port:string //
   private apiPaths = {
+         auth:'/api/auth',
          usuarios:'/api/usuarios',
          roles:'/api/roles'
+         
   }
   constructor() {
        this.app =express();
@@ -55,6 +59,7 @@ class Server {
   }
   routes(){
     this.app.use(this.apiPaths.usuarios,userRoutes);
+    this.app.use(this.apiPaths.auth,login);
 } 
   
   listen() {

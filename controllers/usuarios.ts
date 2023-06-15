@@ -1,7 +1,7 @@
 import { Request ,Response } from "express";
 import Usuario from '../models/usuario';
 import bcryptjs from 'bcryptjs';
-
+ 
 // get usuarios paginado
 export const getUsuarios = async (req:Request, res:Response)=>{
        
@@ -105,19 +105,25 @@ export const putUsuario = async(req:Request,res:Response)=>{
           resto.password=bcryptjs.hashSync(password,salt)
        }
        
-       await usuario.update({
+       /* await usuario.update({
                            apellido:resto.apellido,
                            nombres:resto.nombres,
                            email:resto.email,
                            rol: resto.rol,
-                           estado:resto.estado});
-                       
-        res.json(usuario);  // envio el usario ya actualziado
-    }
-    catch (error) {
-        console.log(console.error);
+                           estado:resto.estado}); */
 
-        res.status(500).json({
+         await usuario.update( resto);
+         res.json({
+         msg: `actualizado id: ${id}`,
+        datos:resto
+    })
+                       
+      
+    }
+     catch (error) {
+        console.log(error);
+
+       return res.status(500).json({
             msg:'no puedo actualizar, hable con el administrador',
             id: id,
             resto:resto
@@ -144,10 +150,10 @@ export const deleteUsuario = async (req:Request,res:Response)=>{
         }
      // await usuario1.destroy() //ESTA ES LA ELIMINICACION FISICA
            await usuario1.update({estado: 0});
-
-      const{ usuario } = req.body ;  
-
-        res.json({"usuario_borrado":usuario1,"usuario_autentificado":usuario} );  // envio el usario ya actualziado
+       
+      const usuariotoken= res.locals.usuario1.dataValues 
+         //    console.log(usuariotoken)
+        res.json({"usuario_borrado":usuario1,"usuariotoken":usuariotoken} );  // envio el usario ya actualziado
     }
     catch (error) {
         console.log(console.error);
