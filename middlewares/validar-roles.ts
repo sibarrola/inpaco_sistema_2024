@@ -16,8 +16,8 @@ export const esAdminRole = (req:Request,res:Response,next:NextFunction)=>{
     next()
 }
 
-export const esRolRequerido= (...roles:any) =>{
-     return (req:Request,res:Response,next:NextFunction)=>{
+export const esRolRequerido= (...roles:any) =>{           //lo que la persona manda, queda almacenado en roles
+     return (req:Request,res:Response,next:NextFunction)=>{   // pero tengo que retornan una función , que se va a ejecutar con los argum rep, res
         if(!res.locals.usuario1) {
             return res.status(500).json({
               msg:"se quiere verificar rol sin validad el token primero"
