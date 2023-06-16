@@ -4,9 +4,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESTOY CONSTRUYENDO</title>
+    <title>ESTOY CONSTRUYENDO google sign-in</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-    <h1>Probando...</h1>
-</body>
+  
+
+    <body>
+        <h1>GOOGLE Sign-in.</h1>
+       
+        <div id="g_id_onload"
+           data-client_id="158232838887-4o5k569c0qv5lg4tfos340uove52isb5.apps.googleusercontent.com"
+           data-auto_prompt="false"
+           data-callback="handleCredentialResponse" 
+           data-auto_select="true"> 
+        </div>
+             
+        </div>
+        <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-shape="rectangular"
+           data-logo_alignment="left">
+        </div>
+
+        <button id="g_id_signout">
+            Sign Out
+        </button>
+        <hr>
+        <h1>One Tap</h1>
+
+
+       
+        <script>
+            function handleCredentialResponse(response) {
+                //google token : ID_TOKEN
+               //    console.log('id_token',response.credential);
+               // decodeJwtResponse() is a custom function defined by you
+               // to decode the credential response.
+              // const responsePayload = decodeJwtResponse(response.credential);
+                  
+               /* console.log("ID: " + responsePayload.sub);
+               console.log('Full Name: ' + responsePayload.name);
+               console.log('Given Name: ' + responsePayload.given_name);
+               console.log('Family Name: ' + responsePayload.family_name);
+               console.log("Image URL: " + responsePayload.picture);
+               console.log("Email: " + responsePayload.email); */
+               const body ={id_token:response.credential}
+                fetch('http://localhost:8000/api/auth/google',{
+                    method:'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                       
+                    },
+                    body:JSON.stringify(body)
+                })
+                  .then(resp=>resp.json())
+                  .then(respuesta=> {
+                      console.log('TRAJO LA RESPUESTA',respuesta);
+                      console.log("ESE ES EL MAIL",respuesta.usuario.email)
+                       localStorage.setItem('email',respuesta.usuario.email)
+                  })
+                  .catch(console.warn);
+
+                const button = document.getElementById('g_id_signout');
+                   button.onclick = async()=>{
+                    alert('pase x aqui', google.accounts.id);
+                     console.log("cuenta id de google",google.accounts.id) ; 
+                    // google.accounts.id.disableAutoselect();
+                      
+                    await google.accounts.id.revoke(localStorage.getItem('email'),done=>{
+                        console.log('consent revocado')
+                          localStorage.clear();
+                         location.reload();
+            
+                     })
+                }
+            }
+          </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+    </body>
+ 
 </html>

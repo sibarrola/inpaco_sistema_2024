@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { check } from 'express-validator';
-import login from '../controllers/auth'
+import {login,googleSignIn} from '../controllers/auth'
 //import { existeUsuario } from '../helpers/db-validators';
 import validarCampos from '../middlewares/validar-campos';
 
@@ -15,5 +15,12 @@ router.post('/login', [
     validarCampos
 ]
 , login);   
+router.post('/google', [
+    // si el usuario fuera el correo, debería validar que sea obligatorio y valido
+    // seria :   check('email', "el correo es obligatorio").isEmail();
+    check('id_token','id token de google es necesario').not().isEmpty(),
+   validarCampos
+]
+, googleSignIn);   
 
 export default router;

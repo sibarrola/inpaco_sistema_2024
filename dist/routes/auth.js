@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
-const auth_1 = __importDefault(require("../controllers/auth"));
+const auth_1 = require("../controllers/auth");
 //import { existeUsuario } from '../helpers/db-validators';
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
 const router = (0, express_1.Router)();
@@ -16,6 +16,12 @@ router.post('/login', [
     (0, express_validator_1.check)('password', 'la contraseña debe tener mas de 4 caracteres').isLength({ min: 4 }),
     (0, express_validator_1.check)('password', 'la contraseña es obligatoria').not().isEmpty(),
     validar_campos_1.default
-], auth_1.default);
+], auth_1.login);
+router.post('/google', [
+    // si el usuario fuera el correo, debería validar que sea obligatorio y valido
+    // seria :   check('email', "el correo es obligatorio").isEmail();
+    (0, express_validator_1.check)('id_token', 'id token de google es necesario').not().isEmpty(),
+    validar_campos_1.default
+], auth_1.googleSignIn);
 exports.default = router;
 //# sourceMappingURL=auth.js.map
