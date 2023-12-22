@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router =Router();
-
+// simplificado para probar
 /*import { check } from 'express-validator';
 
  const {
