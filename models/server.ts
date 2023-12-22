@@ -1,73 +1,57 @@
-import express , {Application} from 'express';
-import login from '../routes/auth';
-import userRoutes from '../routes/usuario';
+import express ,{Application} from 'express';
+import userRoutes from '../routes/usuarios'; // defino el alias de una vez: userRoutes en lugar de poner import * as userRoutes
+import cors from 'cors' ; // el cors es una funcion
+//import createPool  from '../db/conection';
 
-import cors from 'cors';
-import db from '../db/connection';
- 
 class Server {
-    //Aqui en typescript hay que definir las propiedades antes de usarla 
-  private app: Application;  //defino app del tipo Application que lo traigo de express
-  private port:string //
-  private apiPaths = {
-         auth:'/api/auth',
-         usuarios:'/api/usuarios',
-         roles:'/api/roles'
-         
+   private app:Application;
+   private port:string;
+   private apiPaths ={
+       usuarios:'api/usuarios'
+   }
+
+  constructor(){
+     this.app=express();
+     this.port=process.env.PORT || '8000';
+    // this.initDB(),
+     this.middlewares();
+     this.routes();
+     
+
   }
-  constructor() {
-       this.app =express();
-       this.port= process.env.PORT || '8000' ;
-       //métodos iniciales
-       this.dbConnection();
-       this.middlewares();  // a esta la tuve que llamar antes de routes(), porque sino no me traia el body
-       this.routes(); //llamo al método en el constructor
-      
-  }
+
+ 
 
 // conectar base de datos
- async dbConnection(){
+/* async initDB() {
     try {
-             
-
-         await db.authenticate();
-         console.log('database on line');
-         db.sync().then(() => {
-            console.log('table created successfully!');
-         }).catch((error) => {
-            console.error('Unable to create table : ', error);
-         });
-
-
-    } catch(error:any) {
-        throw new Error(error )
-
+        const pool = createPool(); // Crear y verificar el pool
+        console.log('Pool de conexiones a la base de datos establecido');
+    } catch (error) {
+        console.error('Error al establecer el pool de conexiones:', error);
     }
- }
-  //---------------metodos----------------------------------------
-  // middlewares son funciones que se ejecutan antes de las rutas o de otros procedimientos
-  middlewares(){
-     //CORS   
-     // el cors es una funcion
+}
+ */
+  
+  middlewares(){  //funciones que se ejecutan antes de la ruta
+       //cors
       this.app.use(cors());
-     // LECTURA DEL BODY
-     // para poder parsear el body
-     this.app.use(express.json());
-     // CARPETA PUBLICA
+       // lectura del body
+      this.app.use(express.json());
+     
 
-     this.app.use(express.static('public'));
+       // carpeta pública
+       this.app.use(express.static('public'));
   }
   routes(){
-    this.app.use(this.apiPaths.usuarios,userRoutes);
-    this.app.use(this.apiPaths.auth,login);
-} 
-  
-  listen() {
-      this.app.listen(this.port, ()=> {
-          console.log('Servidor corriendo en puerto '+ this.port);
+    this.app.use(this.apiPaths.usuarios,userRoutes)
+  }
+  listen(){
+      this.app.listen(this.port,()=>{
+          console.log('Servidor corriendo en puerto!!',this.port);
       })
   }
+
 }
 
-export default Server; 
-// tuviera otras clases  podria poner el export antes de cada clase, como tengo una sola exporto por defecto
+export default Server;

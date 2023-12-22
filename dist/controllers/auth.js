@@ -87,7 +87,7 @@ const googleSignIn = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 nombres,
                 nombre_usuario: 13589028,
                 email,
-                password: ':P',
+                password: ':P', //no importa lo que almacene aqui, pongo carita con lengua afuera
                 rol: 'administrativo',
                 img,
                 google: true,
@@ -115,4 +115,3 @@ const googleSignIn = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.googleSignIn = googleSignIn;
-//# sourceMappingURL=auth.js.map
